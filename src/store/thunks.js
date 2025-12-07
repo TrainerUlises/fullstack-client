@@ -100,3 +100,23 @@ export const fetchStudentThunk = id => async dispatch => {  // The THUNK
     console.error(err);
   }
 };
+
+// Add Campus
+export const addCampusThunk = (campus) => async (dispatch) => {
+  try {
+    let res = await axios.post("/api/campuses", campus);
+    dispatch(ac.addCampus(res.data));
+    return res.data;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const editCampusThunk = (campus) => async (dispatch) => {
+  try {
+    let res = await axios.put(`/api/campuses/${campus.id}`, campus);
+    dispatch(ac.editCampus(res.data));
+  } catch (err) {
+    console.error(err);
+  }
+};
