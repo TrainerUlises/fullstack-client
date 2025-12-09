@@ -120,3 +120,14 @@ export const editCampusThunk = (campus) => async (dispatch) => {
     console.error(err);
   }
 };
+
+
+// Thunk: Delete a campus
+export const deleteCampusThunk = (campusId) => async (dispatch) => {
+  try {
+    await axios.delete(`/api/campuses/${campusId}`);
+    dispatch(ac.deleteCampus(campusId));   // update Redux store
+  } catch (err) {
+    console.error(err);
+  }
+};

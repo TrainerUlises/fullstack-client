@@ -1,60 +1,74 @@
 /*==================================================
-/src/components/containers\AllCampusesContainer.js
+/src/components/containers/AllCampusesContainer.js
 
-The Container component is responsible for stateful logic and data fetching, and
-passes data (if any) as props to the corresponding View component.
-If needed, it also defines the component's "connect" function.
+Container for AllCampusesView.
+Fetches all campuses and passes data + delete handler to the view.
 ================================================== */
+
 import Header from './Header';
 import { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { fetchAllCampusesThunk } from "../../store/thunks";
+
+// Import thunks
+import { fetchAllCampusesThunk, deleteCampusThunk } from "../../store/thunks";
+
+// Import the corresponding View
 import { AllCampusesView } from "../views";
 
 class AllCampusesContainer extends Component {
-  // Get all campuses data from back-end database
+
+  // Fetch all campuses from the backend when component loads
   componentDidMount() {
-    console.log(this.props);
     this.props.fetchAllCampuses();
   }
 
-  // Render All Campuses view by passing all campuses data as props to the corresponding View component
+  // Render AllCampusesView
   render() {
     return (
       <div>
         <Header />
         <AllCampusesView
           allCampuses={this.props.allCampuses}
+
+          // Pass delete function to the View
+          deleteCampus={this.props.deleteCampus}
         />
       </div>
     );
   }
 }
 
-// 1. The "mapState" argument specifies the data from Redux Store that the component needs.
-// The "mapState" is called when the Store State changes, and it returns a data object of "allCampuses".
-// The following 2 input arguments are passed to the "connect" function used by "AllCampusesContainer" component to connect to Redux Store.
+/*========================================
+  MAP STATE
+  Pulls campus list from Redux store
+========================================*/
 const mapState = (state) => {
   return {
-    allCampuses: state.allCampuses,  // Get the State object from Reducer "allCampuses"
+    allCampuses: state.allCampuses,
   };
-};  
-// 2. The "mapDispatch" argument is used to dispatch Action (Redux Thunk) to Redux Store.
-// The "mapDispatch" calls the specific Thunk to dispatch its action. The "dispatch" is a function of Redux Store.
+};
+
+/*========================================
+  MAP DISPATCH
+  Provides functions that dispatch thunks
+  to the Redux store.
+========================================*/
 const mapDispatch = (dispatch) => {
   return {
     fetchAllCampuses: () => dispatch(fetchAllCampusesThunk()),
+
+    // NEW: Delete a campus
+    deleteCampus: (id) => dispatch(deleteCampusThunk(id)),
   };
 };
 
-// Type check props;
+// Prop validation
 AllCampusesContainer.propTypes = {
   allCampuses: PropTypes.array.isRequired,
   fetchAllCampuses: PropTypes.func.isRequired,
+  deleteCampus: PropTypes.func.isRequired,   // NEW
 };
 
-// Export store-connected container by default
-// AllCampusesContainer uses "connect" function to connect to Redux Store and to read values from the Store 
-// (and re-read the values when the Store State updates).
+// Connect container to Redux store
 export default connect(mapState, mapDispatch)(AllCampusesContainer);
