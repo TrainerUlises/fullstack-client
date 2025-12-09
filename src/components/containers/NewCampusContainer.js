@@ -10,20 +10,50 @@ class NewCampusContainer extends Component {
     this.state = {
       name: "",
       address: "",
-      description: ""
+      description: "",
+      errors: {}   // store validation messages
     };
   }
 
+  // Update local state as the user types
   handleChange = (event) => {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
+  };
+
+  // Validate input BEFORE submitting to DB
+  validateForm = () => {
+    let errors = {};
+
+    if (!this.state.name.trim()) {
+      errors.name = "Name is required.";
+    }
+
+    if (!this.state.address.trim()) {
+      errors.address = "Address is required.";
+    }
+
+    // description is optional, no validation needed
+
+    this.setState({ errors });
+    return Object.keys(errors).length === 0; // returns true if no errors
   };
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    await this.props.addCampus(this.state);
-    this.props.history.push("/campuses");  // redirect after adding
+
+    // Stop form submission if invalid
+    if (!this.validateForm()) return;
+
+    await this.props.addCampus({
+      name: this.state.name,
+      address: this.state.address,
+      description: this.state.description
+    });
+
+    // Redirect to /campuses page
+    this.props.history.push("/campuses");
   };
 
   render() {
@@ -33,6 +63,7 @@ class NewCampusContainer extends Component {
         <NewCampusView
           handleChange={this.handleChange}
           handleSubmit={this.handleSubmit}
+          errors={this.state.errors}       // pass error messages to the view
         />
       </div>
     );
@@ -41,7 +72,7 @@ class NewCampusContainer extends Component {
 
 const mapDispatch = (dispatch) => {
   return {
-    addCampus: (campus) => dispatch(addCampusThunk(campus))
+    addCampus: (campus) => dispatch(addCampusThunk(campus)),
   };
 };
 
