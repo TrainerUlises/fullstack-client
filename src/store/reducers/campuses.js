@@ -17,6 +17,10 @@ const allCampuses = (state = [], action) => {
         campus.id === action.payload.id ? action.payload : campus
       );
 
+      case at.DELETE_CAMPUS:
+        return state.filter((campus) => campus.id !== action.payload);
+      
+
     default:
       return state;
   }

@@ -16,4 +16,6 @@ export const FETCH_STUDENT = "FETCH_STUDENT";
 
 export const EDIT_CAMPUS = "EDIT_CAMPUS";
 
+export const DELETE_CAMPUS = "DELETE_CAMPUS";
+
 

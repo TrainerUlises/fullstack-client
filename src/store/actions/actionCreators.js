@@ -58,3 +58,11 @@ export const editCampus = (campus) => {
     payload: campus,
   };
 };
+
+// Delete campus action
+export const deleteCampus = (campusId) => {
+  return {
+    type: at.DELETE_CAMPUS,
+    payload: campusId,
+  };
+};
