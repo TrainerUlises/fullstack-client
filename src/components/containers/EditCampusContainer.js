@@ -6,6 +6,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { fetchCampusThunk, editCampusThunk } from "../../store/thunks";
 import EditCampusView from "../views/EditCampusView";
+import Header from "./Header";
 
 class EditCampusContainer extends Component {
   constructor(props) {
@@ -82,6 +83,8 @@ class EditCampusContainer extends Component {
   };
 
   render() {
+    if (this.state.loading) return <div>Loading...</div>;
+
     return (
       <EditCampusView
         campus={this.props.campus}

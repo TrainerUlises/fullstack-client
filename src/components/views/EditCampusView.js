@@ -10,14 +10,10 @@
  - formData: editable local state from container
  - handleChange: updates local state as user types
  - handleSubmit: submits the form
-==================================================*/
 
 import React from "react";
 
-const EditCampusView = ({ campus, formData, handleChange, handleSubmit, errorMessage }) => {
-
-  if (!campus.id) return <div>Loading...</div>;
-
+const EditCampusView = ({ campus, handleChange, handleSubmit, errorMessage }) => {
   return (
     <div>
       <h1>Edit Campus</h1>
