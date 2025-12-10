@@ -6,7 +6,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { fetchCampusThunk, editCampusThunk } from "../../store/thunks";
 import EditCampusView from "../views/EditCampusView";
-import Header from "./Header";
+
 
 class EditCampusContainer extends Component {
   constructor(props) {

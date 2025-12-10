@@ -16,17 +16,31 @@ import { Link } from "react-router-dom";
 
 const AllCampusesView = ({ allCampuses, deleteCampus }) => {
   
-  // If the list is empty
   if (!allCampuses.length) {
     return (
-      <div>
-        <p>There are no campuses.</p>
-        <Link to={`/newcampus`}>
-          <button>Add New Campus</button>
+      <div style={{ textAlign: "center", marginTop: "40px" }}>
+        <h2>There are no campuses.</h2>
+  
+        <Link to="/newcampus">
+          <button
+            style={{
+              marginTop: "20px",
+              padding: "10px 20px",
+              backgroundColor: "#4CAF50",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+              fontSize: "16px"
+            }}
+          >
+            Add New Campus
+          </button>
         </Link>
       </div>
     );
   }
+  
 
   return (
     <div style={{ textAlign: "center" }}>

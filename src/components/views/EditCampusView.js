@@ -6,14 +6,16 @@
  the container. This keeps Views clean + reusable.
 
  Props:
- - campus: original campus object (id, name, address…)
+ - campus: original campus object
  - formData: editable local state from container
  - handleChange: updates local state as user types
  - handleSubmit: submits the form
+ - errorMessage: validation error text to show user
+==================================================*/
 
 import React from "react";
 
-const EditCampusView = ({ campus, handleChange, handleSubmit, errorMessage }) => {
+const EditCampusView = ({ campus, formData, handleChange, handleSubmit, errorMessage }) => {
   return (
     <div>
       <h1>Edit Campus</h1>
