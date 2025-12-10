@@ -1,8 +1,6 @@
 /*==================================================
 AllCampusesView.js
 
-This View renders all campuses.
-Now updated to include a Delete button for each campus.
 ================================================== */
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
@@ -10,9 +8,15 @@ import { Link } from "react-router-dom";
 const AllCampusesView = (props) => {
   const { allCampuses, deleteCampus } = props;
 
-  // If there are no campuses in the list
   if (!allCampuses.length) {
-    return <div>There are no campuses.</div>;
+    return (
+      <div>
+        <p>There are no campuses.</p>
+        <Link to={`/newcampus`}>
+          <button>Add New Campus</button>
+        </Link>
+      </div>
+    );
   }
 
   return (
@@ -21,16 +25,29 @@ const AllCampusesView = (props) => {
 
       {allCampuses.map((campus) => (
         <div key={campus.id} style={{ marginBottom: "25px" }}>
-          {/* Clicking the name goes to the single campus view */}
+
           <Link to={`/campus/${campus.id}`}>
             <h2>{campus.name}</h2>
           </Link>
 
-          <h4>campus id: {campus.id}</h4>
+          {/* 📸 Campus Image */}
+          <img
+            src={campus.imageUrl}
+            alt={`${campus.name} logo`}
+            style={{
+              width: "180px",
+              height: "auto",
+              borderRadius: "6px",
+              marginBottom: "10px",
+              border: "1px solid #ccc"
+            }}
+          />
+
+          <p><strong>Campus ID:</strong> {campus.id}</p>
           <p>{campus.address}</p>
           <p>{campus.description}</p>
 
-          {/* DELETE BUTTON — calls the thunk through props */}
+          {/* DELETE BUTTON */}
           <button
             onClick={() => deleteCampus(campus.id)}
             style={{
@@ -49,7 +66,6 @@ const AllCampusesView = (props) => {
         </div>
       ))}
 
-      {/* Button for adding a new campus */}
       <br />
       <Link to={`/newcampus`}>
         <button>Add New Campus</button>
@@ -60,10 +76,9 @@ const AllCampusesView = (props) => {
   );
 };
 
-// Validate props
 AllCampusesView.propTypes = {
   allCampuses: PropTypes.array.isRequired,
-  deleteCampus: PropTypes.func.isRequired,   // added validation
+  deleteCampus: PropTypes.func.isRequired,
 };
 
 export default AllCampusesView;
