@@ -1,7 +1,15 @@
 /*==================================================
-EditCampusView.js
-Displays a form for editing a campus
-==================================================*/
+ EditCampusView.js
+
+ The view is responsible ONLY for displaying the form.
+ All logic (fetching, updating, validation) happens in
+ the container. This keeps Views clean + reusable.
+
+ Props:
+ - campus: original campus object (id, name, address…)
+ - formData: editable local state from container
+ - handleChange: updates local state as user types
+ - handleSubmit: submits the form
 
 import React from "react";
 
@@ -10,34 +18,41 @@ const EditCampusView = ({ campus, handleChange, handleSubmit, errorMessage }) =>
     <div>
       <h1>Edit Campus</h1>
 
-      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+      {/* 🔴 Display validation error if it exists */}
+      {errorMessage && (
+        <p style={{ color: "red", fontWeight: "bold" }}>
+          {errorMessage}
+        </p>
+      )}
 
       <form onSubmit={handleSubmit}>
-        <label>Name:</label><br/>
-        <input
-          name="name"
-          value={campus.name}
-          onChange={handleChange}
-          required
-        />
-        <br /><br />
+        
+        <div>
+          <label>Name: </label>
+          <input
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+          />
+        </div>
 
-        <label>Address:</label><br/>
-        <input
-          name="address"
-          value={campus.address}
-          onChange={handleChange}
-          required
-        />
-        <br /><br />
+        <div>
+          <label>Address: </label>
+          <input
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+          />
+        </div>
 
-        <label>Description:</label><br/>
-        <textarea
-          name="description"
-          value={campus.description}
-          onChange={handleChange}
-        />
-        <br /><br />
+        <div>
+          <label>Description: </label>
+          <input
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+          />
+        </div>
 
         <button type="submit">Save Changes</button>
       </form>

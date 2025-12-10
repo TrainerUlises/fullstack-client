@@ -1,11 +1,5 @@
 /*==================================================
-EditCampusContainer.js
-Handles:
-- Fetching the existing campus
-- Managing form state
-- Handling validation
-- Calling editCampusThunk
-- Redirecting after save
+ EditCampusContainer.js — 
 ==================================================*/
 
 import React, { Component } from "react";
@@ -22,44 +16,57 @@ class EditCampusContainer extends Component {
       name: "",
       address: "",
       description: "",
-      loading: true,      // Wait until initial data is loaded
-      errorMessage: ""    // For simple validation
+      errorMessage: ""  // <-- validation error message here
     };
   }
 
-  /* Load campus data when component first mounts */
-  async componentDidMount() {
-    await this.props.fetchCampus(this.props.match.params.id);
-
-    // Pre-fill form with existing data
-    this.setState({
-      name: this.props.campus.name,
-      address: this.props.campus.address,
-      description: this.props.campus.description || "",
-      loading: false
-    });
+  // Fetch campus on load
+  componentDidMount() {
+    this.props.fetchCampus(this.props.match.params.id);
   }
 
-  /* Update local state when user types */
+  // Prefill form once campus data is loaded
+  componentDidUpdate(prevProps) {
+    if (prevProps.campus.id !== this.props.campus.id) {
+      this.setState({
+        name: this.props.campus.name || "",
+        address: this.props.campus.address || "",
+        description: this.props.campus.description || ""
+      });
+    }
+  }
+
+  // Handle user typing
   handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({ 
+      [event.target.name]: event.target.value,
+      errorMessage: ""   // clear errors as user types
+    });
   };
 
-  /* Simple validation */
+  /*--------------------------------------------------
+     VALIDATION FUNCTION
+     Returns a string error message if invalid,
+     Returns "" if all inputs are valid.
+  --------------------------------------------------*/
   validateInputs = () => {
-    if (!this.state.name.trim()) return "Name is required.";
-    if (!this.state.address.trim()) return "Address is required.";
+    if (!this.state.name.trim()) return "Campus name cannot be empty.";
+    if (!this.state.address.trim()) return "Campus address cannot be empty.";
+    if (!this.state.description.trim()) return "Campus description cannot be empty.";
     return "";
   };
 
-  /* Handle save/submit */
+  /*--------------------------------------------------
+    Submit handler with validation
+  --------------------------------------------------*/
   handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Validate before submitting
     const error = this.validateInputs();
     if (error) {
       this.setState({ errorMessage: error });
-      return;
+      return; // stop here → do NOT submit invalid data
     }
 
     const updatedCampus = {
@@ -71,7 +78,7 @@ class EditCampusContainer extends Component {
 
     await this.props.editCampus(updatedCampus);
 
-    // redirect back to campus page
+    // Redirect to updated campus page
     this.props.history.push(`/campus/${this.props.campus.id}`);
   };
 
@@ -79,20 +86,17 @@ class EditCampusContainer extends Component {
     if (this.state.loading) return <div>Loading...</div>;
 
     return (
-      <div>
-        <Header />
-        <EditCampusView
-          campus={this.state}
-          handleChange={this.handleChange}
-          handleSubmit={this.handleSubmit}
-          errorMessage={this.state.errorMessage}
-        />
-      </div>
+      <EditCampusView
+        campus={this.props.campus}
+        formData={this.state}
+        handleChange={this.handleChange}
+        handleSubmit={this.handleSubmit}
+        errorMessage={this.state.errorMessage}   // pass error to view
+      />
     );
   }
 }
 
-/* Redux connections */
 const mapState = (state) => ({
   campus: state.campus
 });

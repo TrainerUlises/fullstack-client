@@ -1,13 +1,22 @@
 /*==================================================
-AllCampusesView.js
+  AllCampusesView.js
 
-================================================== */
+  This View renders:
+    • A list of all campuses
+    • A campus thumbnail image (if it exists)
+    • Link to each campus page
+    • Delete button for each campus
+    • "Add New Campus" button
+
+  Receives data from AllCampusesContainer.
+==================================================*/
+
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const AllCampusesView = (props) => {
-  const { allCampuses, deleteCampus } = props;
-
+const AllCampusesView = ({ allCampuses, deleteCampus }) => {
+  
+  // If the list is empty
   if (!allCampuses.length) {
     return (
       <div>
@@ -20,34 +29,45 @@ const AllCampusesView = (props) => {
   }
 
   return (
-    <div>
+    <div style={{ textAlign: "center" }}>
       <h1>All Campuses</h1>
 
       {allCampuses.map((campus) => (
-        <div key={campus.id} style={{ marginBottom: "25px" }}>
+        <div 
+          key={campus.id} 
+          style={{
+            marginBottom: "35px",
+            padding: "20px",
+          }}
+        >
 
+          {/* Campus Name */}
           <Link to={`/campus/${campus.id}`}>
-            <h2>{campus.name}</h2>
+            <h2 style={{ color: "#4B0082" }}>{campus.name}</h2>
           </Link>
 
-          {/* 📸 Campus Image */}
-          <img
-            src={campus.imageUrl}
-            alt={`${campus.name} logo`}
-            style={{
-              width: "180px",
-              height: "auto",
-              borderRadius: "6px",
-              marginBottom: "10px",
-              border: "1px solid #ccc"
-            }}
-          />
+          {/* Campus Thumbnail */}
+          {campus.imageUrl && (
+            <img
+              src={campus.imageUrl}
+              alt={`${campus.name} campus`}
+              style={{
+                width: "180px",
+                borderRadius: "8px",
+                margin: "10px 0",
+                display: "block",
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            />
+          )}
 
-          <p><strong>Campus ID:</strong> {campus.id}</p>
+          {/* Campus Info */}
+          <h4>Campus ID: {campus.id}</h4>
           <p>{campus.address}</p>
           <p>{campus.description}</p>
 
-          {/* DELETE BUTTON */}
+          {/* Delete Button */}
           <button
             onClick={() => deleteCampus(campus.id)}
             style={{
@@ -62,16 +82,23 @@ const AllCampusesView = (props) => {
             Delete Campus
           </button>
 
-          <hr />
+          <hr style={{ marginTop: "30px" }} />
         </div>
       ))}
 
-      <br />
+      {/* Add Campus Button */}
       <Link to={`/newcampus`}>
-        <button>Add New Campus</button>
+        <button
+          style={{
+            marginTop: "20px",
+            padding: "8px 14px",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+        >
+          Add New Campus
+        </button>
       </Link>
-
-      <br /><br />
     </div>
   );
 };
