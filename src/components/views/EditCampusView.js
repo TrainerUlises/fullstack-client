@@ -1,40 +1,43 @@
+/*==================================================
+EditCampusView.js
+Displays a form for editing a campus
+==================================================*/
+
 import React from "react";
 
-const EditCampusView = ({ campus, formData, handleChange, handleSubmit }) => {
-
-  if (!campus.id) return <div>Loading...</div>;
-
+const EditCampusView = ({ campus, handleChange, handleSubmit, errorMessage }) => {
   return (
     <div>
       <h1>Edit Campus</h1>
 
+      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name: </label>
-          <input
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-        </div>
+        <label>Name:</label><br/>
+        <input
+          name="name"
+          value={campus.name}
+          onChange={handleChange}
+          required
+        />
+        <br /><br />
 
-        <div>
-          <label>Address: </label>
-          <input
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-          />
-        </div>
+        <label>Address:</label><br/>
+        <input
+          name="address"
+          value={campus.address}
+          onChange={handleChange}
+          required
+        />
+        <br /><br />
 
-        <div>
-          <label>Description: </label>
-          <input
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-          />
-        </div>
+        <label>Description:</label><br/>
+        <textarea
+          name="description"
+          value={campus.description}
+          onChange={handleChange}
+        />
+        <br /><br />
 
         <button type="submit">Save Changes</button>
       </form>
