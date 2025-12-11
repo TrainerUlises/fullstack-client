@@ -56,6 +56,18 @@ const EditCampusView = ({ campus, formData, handleChange, handleSubmit, errorMes
           />
         </div>
 
+        <div>
+          <label>Image URL: </label>
+          <input
+            name="imageUrl"
+            value={formData.imageUrl}
+            onChange={handleChange}
+            placeholder="Enter campus image link"
+          />
+        </div>
+<br />
+
+
         <button type="submit">Save Changes</button>
       </form>
     </div>
