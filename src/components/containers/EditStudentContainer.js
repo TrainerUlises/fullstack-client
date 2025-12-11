@@ -12,7 +12,7 @@ This container handles:
 
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { fetchStudentThunk, editStudentThunk } from "../../store/thunks";
+import { fetchStudentThunk, editStudentThunk, fetchAllCampusesThunk } from "../../store/thunks";
 import EditStudentView from "../views/EditStudentView";
 import Header from "./Header";
 
@@ -20,7 +20,6 @@ class EditStudentContainer extends Component {
   constructor(props) {
     super(props);
 
-    // Local component state to hold form values
     this.state = {
       firstname: "",
       lastname: "",
@@ -28,22 +27,23 @@ class EditStudentContainer extends Component {
       imageUrl: "",
       gpa: "",
       campusId: "",
-      loading: true,        // true until student data loads
-      errorMessage: ""      // simple validation feedback
+      loading: true,
+      errorMessage: ""
     };
   }
 
-  /*--------------------------------------------------
-    Component loads the student data when mounted.
-    Once fetched from Redux, we pre-fill the form
-    with the existing student information.
-  --------------------------------------------------*/
   async componentDidMount() {
-    await this.props.fetchStudent(this.props.match.params.id);
+    const studentId = this.props.match.params.id;
+
+    // Load single student
+    await this.props.fetchStudent(studentId);
+
+    // Load campuses for dropdown
+    await this.props.fetchAllCampuses();
 
     const s = this.props.student;
 
-    // Prepopulate form fields
+    // Pre-fill form
     this.setState({
       firstname: s.firstname,
       lastname: s.lastname,
@@ -55,16 +55,10 @@ class EditStudentContainer extends Component {
     });
   }
 
-  /*--------------------------------------------------
-    Updates state whenever the user types in a form field
-  --------------------------------------------------*/
   handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  /*--------------------------------------------------
-    Basic validation to prevent empty or invalid fields
-  --------------------------------------------------*/
   validate = () => {
     if (!this.state.firstname.trim()) return "First name required.";
     if (!this.state.lastname.trim()) return "Last name required.";
@@ -72,23 +66,15 @@ class EditStudentContainer extends Component {
     return "";
   };
 
-  /*--------------------------------------------------
-    Runs when the user submits the form.
-    - Validates input
-    - Sends updated student to backend
-    - Redirects back to student view
-  --------------------------------------------------*/
-  handleSubmit = async (e) => {
-    e.preventDefault();
+  handleSubmit = async (event) => {
+    event.preventDefault();
 
-    // Validate first
-    let error = this.validate();
+    const error = this.validate();
     if (error) {
       this.setState({ errorMessage: error });
       return;
     }
 
-    // Construct updated student object
     const updatedStudent = {
       id: parseInt(this.props.match.params.id),
       firstname: this.state.firstname,
@@ -96,25 +82,25 @@ class EditStudentContainer extends Component {
       email: this.state.email,
       imageUrl: this.state.imageUrl || null,
       gpa: this.state.gpa || null,
-      campusId: Number(this.state.campusId)
+      campusId: this.state.campusId === "" ? null : Number(this.state.campusId),
     };
 
-    // Send to backend
     await this.props.editStudent(updatedStudent);
 
-    // Redirect to student page
+    // Redirect back to that student’s page
     this.props.history.push(`/student/${updatedStudent.id}`);
   };
 
   render() {
-    // Prevent rendering form until student data is loaded
-    if (this.state.loading) return <div>Loading...</div>;
+    if (this.state.loading) return <h2>Loading...</h2>;
 
     return (
       <div>
         <Header />
+
         <EditStudentView
           student={this.state}
+          campuses={this.props.allCampuses}   
           handleChange={this.handleChange}
           handleSubmit={this.handleSubmit}
           errorMessage={this.state.errorMessage}
@@ -124,18 +110,14 @@ class EditStudentContainer extends Component {
   }
 }
 
-/*--------------------------------------------------
-  MAP STATE: Pulls the single student from Redux store
---------------------------------------------------*/
 const mapState = (state) => ({
-  student: state.student
+  student: state.student,
+  allCampuses: state.allCampuses
 });
 
-/*--------------------------------------------------
-  MAP DISPATCH: Makes thunks available as props
---------------------------------------------------*/
 const mapDispatch = (dispatch) => ({
   fetchStudent: (id) => dispatch(fetchStudentThunk(id)),
+  fetchAllCampuses: () => dispatch(fetchAllCampusesThunk()),
   editStudent: (student) => dispatch(editStudentThunk(student))
 });
 

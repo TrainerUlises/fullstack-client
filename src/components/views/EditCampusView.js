@@ -60,3 +60,4 @@ const EditCampusView = ({ campus, formData, handleChange, handleSubmit }) => {
 };
 
 export default EditCampusView;
+
