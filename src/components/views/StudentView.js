@@ -1,27 +1,44 @@
-/*==================================================
-StudentView.js
-
-Displays a single student.
-Added:
-- Edit Student button linking to /student/:id/edit
-==================================================*/
-
+import React from "react";
 import { Link } from "react-router-dom";
 
-const StudentView = (props) => {
-  const { student } = props;
-
-  // Guard: prevent crash when data hasn't loaded yet
-  if (!student || !student.campus) return <div>Loading...</div>;
+const StudentView = ({ student }) => {
+  if (!student.id) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div>
-      <h1>{student.firstname + " " + student.lastname}</h1>
+    <div style={{ textAlign: "center" }}>
+      <h1>{student.firstName} {student.lastName}</h1>
 
-      {/* Show campus name */}
-      <h3>{student.campus.name}</h3>
+      {/* Show campus or a helpful message */}
+      {student.campus ? (
+        <p>
+          Enrolled at:{" "}
+          <Link to={`/campus/${student.campus.id}`}>
+            {student.campus.name}
+          </Link>
+        </p>
+      ) : (
+        <p style={{ color: "gray" }}>
+          This student is not enrolled at a campus.
+        </p>
+      )}
 
-      {/* Link to Edit Student page */}
+      {/* Email */}
+      <p><strong>Email:</strong> {student.email}</p>
+
+      {/* GPA */}
+      <p><strong>GPA:</strong> {student.gpa ?? "N/A"}</p>
+
+      {/* Image */}
+      <img
+        src={student.imageUrl}
+        alt="student"
+        style={{ width: "160px", height: "160px", borderRadius: "10px" }}
+      />
+
+      {/* Edit button */}
+      <br /><br />
       <Link to={`/student/${student.id}/edit`}>
         <button>Edit Student</button>
       </Link>
