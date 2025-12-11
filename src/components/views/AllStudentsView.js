@@ -6,46 +6,71 @@ It constructs a React component to display the all students view page.
 ================================================== */
 import { Link } from "react-router-dom";
 
-const AllStudentsView = (props) => {
-  const {students, deleteStudent} = props;
-  // If there is no student, display a message
+const AllStudentsView = ({ students, deleteStudent }) => {
+  
+  // If there are no students
   if (!students.length) {
     return (
-    <div>
-      <p>There are no students.</p>
-      <Link to={`newstudent`}>
-        <button>Add New Student</button>
-      </Link>
-    </div>
+      <div style={{ textAlign: "center" }}>
+        <p>There are no students.</p>
+        <Link to="/newstudent">
+          <button>Add New Student</button>
+        </Link>
+      </div>
     );
   }
-  
-  // If there is at least one student, render All Students view 
+
   return (
-    <div>
+    <div style={{ textAlign: "center" }}>
       <h1>All Students</h1>
 
       {students.map((student) => {
-          let name = student.firstname + " " + student.lastname;
-          return (
-            <div key={student.id}>
-              <Link to={`/student/${student.id}`}>
-                <h2>{name}</h2>
-              </Link>
-              <button onClick={() => deleteStudent(student.id)}>Delete</button>
-              <hr/>
-            </div>
-          );
-        }
-      )}
-      <br/>
-      <Link to={`/newstudent`}>
+        const name = `${student.firstname} ${student.lastname}`;
+
+        return (
+          <div key={student.id} style={{ marginBottom: "25px" }}>
+
+            {/* Student Image */}
+            <img
+              src={student.imageUrl}
+              alt={name}
+              style={{
+                width: "130px",
+                height: "auto",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+                marginBottom: "10px"
+              }}
+            />
+
+            <Link to={`/student/${student.id}`}>
+              <h2>{name}</h2>
+            </Link>
+
+            <button
+              onClick={() => deleteStudent(student.id)}
+              style={{
+                backgroundColor: "red",
+                color: "white",
+                padding: "6px 12px",
+                borderRadius: "4px",
+                cursor: "pointer"
+              }}
+            >
+              Delete
+            </button>
+
+            <hr style={{ width: "60%", margin: "20px auto" }} />
+          </div>
+        );
+      })}
+
+      <Link to="/newstudent">
         <button>Add New Student</button>
       </Link>
-      <br/><br/>
+      <br /><br />
     </div>
   );
 };
-
 
 export default AllStudentsView;

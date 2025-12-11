@@ -1,37 +1,106 @@
+/*==================================================
+NewCampusView.js
+==================================================*/
+
 import React from "react";
 
-const NewCampusView = ({ handleChange, handleSubmit, errors }) => {
+const inputStyle = {
+  marginBottom: "10px",
+  padding: "6px",
+  width: "250px",
+};
+
+const errorStyle = {
+  color: "red",
+  fontSize: "14px",
+  marginTop: "-8px",
+  marginBottom: "10px",
+};
+
+const NewCampusView = (props) => {
+  const {
+    name,
+    address,
+    description,
+    imageUrl,
+    errors,
+    isValid,
+    handleChange,
+    handleSubmit,
+  } = props;
+
   return (
-    <div>
+    <div style={{ textAlign: "center" }}>
       <h1>Add a New Campus</h1>
 
       <form onSubmit={handleSubmit}>
 
-        {/* NAME FIELD */}
-        <label>Name:</label>
-        <input type="text" name="name" onChange={handleChange} />
-        {errors.name && (
-          <p style={{ color: "red", margin: 0 }}>{errors.name}</p>
-        )}
+        {/* Name */}
+        <div>
+          <input
+            style={inputStyle}
+            type="text"
+            placeholder="Campus Name"
+            name="name"
+            value={name}
+            onChange={handleChange}
+          />
+          {errors.name && <div style={errorStyle}>{errors.name}</div>}
+        </div>
 
-        <br />
+        {/* Address */}
+        <div>
+          <input
+            style={inputStyle}
+            type="text"
+            placeholder="Campus Address"
+            name="address"
+            value={address}
+            onChange={handleChange}
+          />
+          {errors.address && <div style={errorStyle}>{errors.address}</div>}
+        </div>
 
-        {/* ADDRESS FIELD */}
-        <label>Address:</label>
-        <input type="text" name="address" onChange={handleChange} />
-        {errors.address && (
-          <p style={{ color: "red", margin: 0 }}>{errors.address}</p>
-        )}
+        {/* Description */}
+        <div>
+          <input
+            style={inputStyle}
+            type="text"
+            placeholder="Description (optional)"
+            name="description"
+            value={description}
+            onChange={handleChange}
+          />
+        </div>
 
-        <br />
+        {/* Image URL */}
+        <div>
+          <input
+            style={inputStyle}
+            type="text"
+            placeholder="Image URL (optional)"
+            name="imageUrl"
+            value={imageUrl}
+            onChange={handleChange}
+          />
+          {errors.imageUrl && <div style={errorStyle}>{errors.imageUrl}</div>}
+        </div>
 
-        {/* DESCRIPTION FIELD */}
-        <label>Description:</label>
-        <input type="text" name="description" onChange={handleChange} />
-
-        <br /><br />
-
-        <button type="submit">Add Campus</button>
+        <button
+          type="submit"
+          disabled={!isValid}
+          style={{
+            marginTop: "15px",
+            padding: "8px 14px",
+            cursor: isValid ? "pointer" : "not-allowed",
+            backgroundColor: isValid ? "#4CAF50" : "gray",
+            color: "white",
+            borderRadius: "6px",
+            border: "none",
+          }}
+        >
+          Add Campus
+        </button>
       </form>
     </div>
   );

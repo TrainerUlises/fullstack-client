@@ -75,14 +75,15 @@ export const deleteStudentThunk = studentId => async dispatch => {  // The THUNK
 };
 
 // Edit Student
-// THUNK CREATOR:
-export const editStudentThunk = student => async dispatch => {  // The THUNK
+export const editStudentThunk = (student) => async (dispatch) => {
   try {
-    // API "put" call to update student (based on "id" and "student" object's data) from database
-    let updatedStudent = await axios.put(`/api/students/${student.id}`, student); 
-    // Update successful so change state with dispatch
-    dispatch(ac.editStudent(updatedStudent));
-  } catch(err) {
+    let res = await axios.put(`/api/students/${student.id}`, student);
+
+    // MUST send ONLY res.data — not the entire axios response!
+    dispatch(ac.editStudent(res.data));
+
+    return res.data; // <-- helpful for containers
+  } catch (err) {
     console.error(err);
   }
 };

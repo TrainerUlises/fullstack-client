@@ -1,32 +1,19 @@
 /*==================================================
- EditCampusView.js
-
- The view is responsible ONLY for displaying the form.
- All logic (fetching, updating, validation) happens in
- the container. This keeps Views clean + reusable.
-
- Props:
- - campus: original campus object (id, name, address…)
- - formData: editable local state from container
- - handleChange: updates local state as user types
- - handleSubmit: submits the form
+EditCampusView.js
+================================================== */
 
 import React from "react";
 
-const EditCampusView = ({ campus, handleChange, handleSubmit, errorMessage }) => {
+const EditCampusView = ({ campus, formData, handleChange, handleSubmit }) => {
+
+  if (!campus || !campus.id) return <div>Loading...</div>;
+
   return (
-    <div>
+    <div style={{ textAlign: "center" }}>
       <h1>Edit Campus</h1>
 
-      {/* 🔴 Display validation error if it exists */}
-      {errorMessage && (
-        <p style={{ color: "red", fontWeight: "bold" }}>
-          {errorMessage}
-        </p>
-      )}
+      <form onSubmit={handleSubmit} style={{ display: "inline-block", textAlign: "left" }}>
 
-      <form onSubmit={handleSubmit}>
-        
         <div>
           <label>Name: </label>
           <input
@@ -54,7 +41,19 @@ const EditCampusView = ({ campus, handleChange, handleSubmit, errorMessage }) =>
           />
         </div>
 
+        <div>
+          <label>Image URL: </label>
+          <input
+            name="imageUrl"
+            value={formData.imageUrl}
+            onChange={handleChange}
+          />
+        </div>
+
+        <br />
+
         <button type="submit">Save Changes</button>
+
       </form>
     </div>
   );

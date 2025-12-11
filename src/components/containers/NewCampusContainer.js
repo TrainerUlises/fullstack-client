@@ -11,48 +11,68 @@ class NewCampusContainer extends Component {
       name: "",
       address: "",
       description: "",
-      errors: {}   // store validation messages
+      imageUrl: "",
+      errors: {},
+      isValid: false,
     };
   }
 
-  // Update local state as the user types
+  // VALIDATION LOGIC
+  validateField = (fieldName, value) => {
+    let errors = { ...this.state.errors };
+
+    if (fieldName === "name") {
+      if (!value.trim()) errors.name = "Campus name is required.";
+      else delete errors.name;
+    }
+
+    if (fieldName === "address") {
+      if (!value.trim()) errors.address = "Address is required.";
+      else delete errors.address;
+    }
+
+    if (fieldName === "imageUrl") {
+      if (value && !value.startsWith("http")) {
+        errors.imageUrl = "URL must start with http or https.";
+      } else {
+        delete errors.imageUrl;
+      }
+    }
+
+    this.setState({ errors }, this.updateFormValidity);
+  };
+
+  updateFormValidity = () => {
+    const { name, address, errors } = this.state;
+    const isValid = name.trim() && address.trim() && Object.keys(errors).length === 0;
+    this.setState({ isValid });
+  };
+
+  // Update local state AS user types
   handleChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
+    const { name, value } = event.target;
+
+    this.setState(
+      { [name]: value },
+      () => this.validateField(name, value) // validate real-time
+    );
   };
 
-  // Validate input BEFORE submitting to DB
-  validateForm = () => {
-    let errors = {};
-
-    if (!this.state.name.trim()) {
-      errors.name = "Name is required.";
-    }
-
-    if (!this.state.address.trim()) {
-      errors.address = "Address is required.";
-    }
-
-    // description is optional, no validation needed
-
-    this.setState({ errors });
-    return Object.keys(errors).length === 0; // returns true if no errors
-  };
-
+  // Submit after validation
   handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Stop form submission if invalid
-    if (!this.validateForm()) return;
+    if (!this.state.isValid) return;
 
-    await this.props.addCampus({
+    const payload = {
       name: this.state.name,
       address: this.state.address,
-      description: this.state.description
-    });
+      description: this.state.description,
+      imageUrl: this.state.imageUrl || "https://via.placeholder.com/300",
+    };
 
-    // Redirect to /campuses page
+    await this.props.addCampus(payload);
+
     this.props.history.push("/campuses");
   };
 
@@ -61,19 +81,22 @@ class NewCampusContainer extends Component {
       <div>
         <Header />
         <NewCampusView
+          name={this.state.name}
+          address={this.state.address}
+          description={this.state.description}
+          imageUrl={this.state.imageUrl}
+          errors={this.state.errors}
+          isValid={this.state.isValid}
           handleChange={this.handleChange}
           handleSubmit={this.handleSubmit}
-          errors={this.state.errors}       // pass error messages to the view
         />
       </div>
     );
   }
 }
 
-const mapDispatch = (dispatch) => {
-  return {
-    addCampus: (campus) => dispatch(addCampusThunk(campus)),
-  };
-};
+const mapDispatch = (dispatch) => ({
+  addCampus: (campus) => dispatch(addCampusThunk(campus)),
+});
 
 export default connect(null, mapDispatch)(NewCampusContainer);
