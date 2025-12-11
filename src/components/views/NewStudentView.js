@@ -8,7 +8,6 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
-// Create styling for the input form
 const useStyles = makeStyles(() => ({
   formContainer: {
     width: '500px',
@@ -17,10 +16,7 @@ const useStyles = makeStyles(() => ({
     margin: 'auto',
     paddingBottom: '20px'
   },
-  title: {
-    textAlign: 'center',
-    textDecoration: 'none',
-  },
+  title: { textAlign: 'center' },
   formTitle: {
     backgroundColor: '#c5c8d6',
     marginBottom: '15px',
@@ -36,7 +32,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const NewStudentView = (props) => {
-  const { handleChange, handleSubmit, errorMessage } = props;
+  const { handleChange, handleSubmit, errorMessage, campusId } = props;
   const classes = useStyles();
 
   return (
@@ -50,42 +46,46 @@ const NewStudentView = (props) => {
           </Typography>
         </div>
 
-        {/* Display validation error if present */}
         {errorMessage && (
           <p className={classes.errorText}>{errorMessage}</p>
         )}
 
-        {/* Student creation form */}
         <form style={{ textAlign: 'center' }} onSubmit={handleSubmit}>
 
           {/* FIRST NAME */}
-          <label style={{ color: '#11153e', fontWeight: 'bold' }}>First Name: </label>
+          <label>First Name: </label>
           <input type="text" name="firstName" onChange={handleChange} required />
           <br /><br />
 
           {/* LAST NAME */}
-          <label style={{ color: '#11153e', fontWeight: 'bold' }}>Last Name: </label>
+          <label>Last Name: </label>
           <input type="text" name="lastName" onChange={handleChange} required />
           <br /><br />
 
           {/* EMAIL */}
-          <label style={{ color: '#11153e', fontWeight: 'bold' }}>Email: </label>
+          <label>Email: </label>
           <input type="email" name="email" onChange={handleChange} required />
           <br /><br />
 
-          {/* PROFILE IMAGE */}
-          <label style={{ color: '#11153e', fontWeight: 'bold' }}>Image URL: </label>
+          {/* IMAGE */}
+          <label>Image URL: </label>
           <input type="text" name="imageUrl" placeholder="Optional" onChange={handleChange} />
           <br /><br />
 
           {/* GPA */}
-          <label style={{ color: '#11153e', fontWeight: 'bold' }}>GPA (0–4): </label>
+          <label>GPA (0–4): </label>
           <input type="number" name="gpa" step="0.1" min="0" max="4" placeholder="Optional" onChange={handleChange} />
           <br /><br />
 
-          {/* CAMPUS ID */}
-          <label style={{ color: '#11153e', fontWeight: 'bold' }}>Campus ID: </label>
-          <input type="number" name="campusId" onChange={handleChange} required />
+          {/* CAMPUS ID — OPTIONAL */}
+          <label>Campus ID: </label>
+          <input
+            type="number"
+            name="campusId"
+            value={campusId || ""}
+            placeholder="Optional"
+            onChange={handleChange}
+          />
           <br /><br />
 
           <Button variant="contained" color="primary" type="submit">

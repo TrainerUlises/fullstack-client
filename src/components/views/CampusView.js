@@ -13,7 +13,6 @@ import { Link } from "react-router-dom";
 
 const CampusView = ({ campus }) => {
 
-  // Prevent rendering before data is loaded
   if (!campus || !campus.id) {
     return <h2>Loading campus...</h2>;
   }
@@ -29,15 +28,10 @@ const CampusView = ({ campus }) => {
         <img
           src={campus.imageUrl}
           alt={`${campus.name} campus`}
-          style={{
-            width: "260px",
-            borderRadius: "10px",
-            margin: "15px 0",
-          }}
+          style={{ width: "260px", borderRadius: "10px", margin: "15px 0" }}
         />
       )}
 
-      {/* Address and Description */}
       <p>{campus.address}</p>
       <p>{campus.description}</p>
 
@@ -46,17 +40,22 @@ const CampusView = ({ campus }) => {
         <button style={{ marginTop: "10px" }}>Edit Campus</button>
       </Link>
 
+      {/* Add Student Button */}
+      <div style={{ marginTop: "12px" }}>
+        <Link to={`/newstudent?campusId=${campus.id}`}>
+          <button>Add New Student to This Campus</button>
+        </Link>
+      </div>
+
       <hr style={{ margin: "30px 0" }} />
 
       {/* Students Section */}
       <h2>Students Enrolled</h2>
 
-      {/* No students */}
       {(!campus.students || campus.students.length === 0) && (
         <p>No students currently enrolled.</p>
       )}
 
-      {/* Student List */}
       {campus.students &&
         campus.students.map((student) => {
           const fullName = `${student.firstname} ${student.lastname}`;
@@ -73,4 +72,3 @@ const CampusView = ({ campus }) => {
 };
 
 export default CampusView;
-

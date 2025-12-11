@@ -10,76 +10,80 @@ It receives:
 It contains NO business logic.
 ==================================================*/
 
-import React from "react";
+import Button from '@material-ui/core/Button';
 
-const EditStudentView = ({ student, handleChange, handleSubmit, errorMessage }) => {
+const EditStudentView = (props) => {
+  const { student, campuses, handleChange, handleSubmit, errorMessage } = props;
+
   return (
-    <div>
+    <div style={{ textAlign: "center", padding: "20px" }}>
       <h1>Edit Student</h1>
 
-      {/* Display validation errors in red */}
       {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
 
-      {/* Form for editing student */}
-      <form onSubmit={handleSubmit}>
-        
-        {/* FIRST NAME */}
-        <label>First Name:</label><br/>
+      <form onSubmit={handleSubmit} style={{ maxWidth: "500px", margin: "0 auto" }}>
+
+        <label>First Name:</label><br />
         <input
           name="firstname"
           value={student.firstname}
           onChange={handleChange}
-        />
-        <br/><br/>
+        /><br /><br />
 
-        {/* LAST NAME */}
-        <label>Last Name:</label><br/>
+        <label>Last Name:</label><br />
         <input
           name="lastname"
           value={student.lastname}
           onChange={handleChange}
-        />
-        <br/><br/>
+        /><br /><br />
 
-        {/* EMAIL */}
-        <label>Email:</label><br/>
+        <label>Email:</label><br />
         <input
           name="email"
           value={student.email}
           onChange={handleChange}
-        />
-        <br/><br/>
+        /><br /><br />
 
-        {/* IMAGE URL */}
-        <label>Image URL:</label><br/>
+        <label>Image URL:</label><br />
         <input
           name="imageUrl"
           value={student.imageUrl}
           onChange={handleChange}
-        />
-        <br/><br/>
+        /><br /><br />
 
-        {/* GPA */}
-        <label>GPA:</label><br/>
+        <label>GPA (0–4):</label><br />
         <input
           name="gpa"
-          value={student.gpa}
           type="number"
+          min="0"
+          max="4"
+          step="0.1"
+          value={student.gpa}
           onChange={handleChange}
-        />
-        <br/><br/>
+        /><br /><br />
 
-        {/* CAMPUS ID */}
-        <label>Campus ID:</label><br/>
-        <input
+        {/* CAMPUS DROPDOWN */}
+        <label>Assign to Campus:</label><br />
+        <select
           name="campusId"
-          value={student.campusId}
+          value={student.campusId || ""}
           onChange={handleChange}
-        />
-        <br/><br/>
+          style={{ padding: "6px", width: "200px" }}
+        >
+          <option value="">— Unassigned —</option>
 
-        {/* SUBMIT BUTTON */}
-        <button type="submit">Save Changes</button>
+          {campuses.map((campus) => (
+            <option key={campus.id} value={campus.id}>
+              {campus.name}
+            </option>
+          ))}
+        </select>
+
+        <br /><br />
+
+        <Button type="submit" variant="contained" color="primary">
+          Save Changes
+        </Button>
       </form>
     </div>
   );
