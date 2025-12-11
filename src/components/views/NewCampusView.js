@@ -31,6 +31,11 @@ const NewCampusView = ({ handleChange, handleSubmit, errors }) => {
 
         <br /><br />
 
+        <label>Image URL:</label>
+        <input type="text" name="imageUrl" onChange={handleChange} placeholder="Optional" />
+        <br />
+
+
         <button type="submit">Add Campus</button>
       </form>
     </div>

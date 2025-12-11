@@ -11,6 +11,7 @@ class NewCampusContainer extends Component {
       name: "",
       address: "",
       description: "",
+      imageUrl: "",
       errors: {}   // store validation messages
     };
   }
@@ -49,7 +50,8 @@ class NewCampusContainer extends Component {
     await this.props.addCampus({
       name: this.state.name,
       address: this.state.address,
-      description: this.state.description
+      description: this.state.description,
+      imageUrl: this.state.imageUrl || null
     });
 
     // Redirect to /campuses page

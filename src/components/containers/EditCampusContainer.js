@@ -16,6 +16,7 @@ class EditCampusContainer extends Component {
       name: "",
       address: "",
       description: "",
+      imageUrl:"",
       errorMessage: ""  // <-- validation error message here
     };
   }
@@ -31,7 +32,8 @@ class EditCampusContainer extends Component {
       this.setState({
         name: this.props.campus.name || "",
         address: this.props.campus.address || "",
-        description: this.props.campus.description || ""
+        description: this.props.campus.description || "",
+        imageUrl: this.props.campus.imageUrl || ""
       });
     }
   }
@@ -73,7 +75,8 @@ class EditCampusContainer extends Component {
       id: this.props.campus.id,
       name: this.state.name,
       address: this.state.address,
-      description: this.state.description
+      description: this.state.description,
+      imageUrl: this.state.imageUrl || null
     };
 
     await this.props.editCampus(updatedCampus);
