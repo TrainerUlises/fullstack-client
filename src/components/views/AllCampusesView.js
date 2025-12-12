@@ -5,14 +5,9 @@ AllCampusesView.js
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-<<<<<<< HEAD
 const AllCampusesView = (props) => {
   const { allCampuses, deleteCampus } = props;
 
-=======
-const AllCampusesView = ({ allCampuses, deleteCampus }) => {
-  
->>>>>>> b8b8a9c48735157ca4c44279afeedbc7ba5baff6
   if (!allCampuses.length) {
     return (
       <div style={{ textAlign: "center", marginTop: "40px" }}>

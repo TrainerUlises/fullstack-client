@@ -2,10 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { fetchCampusThunk, editCampusThunk } from "../../store/thunks";
 import EditCampusView from "../views/EditCampusView";
-<<<<<<< HEAD
-=======
-
->>>>>>> b8b8a9c48735157ca4c44279afeedbc7ba5baff6
 
 class EditCampusContainer extends Component {
   constructor(props) {
@@ -14,13 +10,7 @@ class EditCampusContainer extends Component {
     this.state = {
       name: "",
       address: "",
-<<<<<<< HEAD
       description: ""
-=======
-      description: "",
-      imageUrl:"",
-      errorMessage: ""  // <-- validation error message here
->>>>>>> b8b8a9c48735157ca4c44279afeedbc7ba5baff6
     };
   }
 
@@ -49,14 +39,7 @@ class EditCampusContainer extends Component {
 
     const updatedCampus = {
       id: this.props.campus.id,
-<<<<<<< HEAD
       ...this.state
-=======
-      name: this.state.name,
-      address: this.state.address,
-      description: this.state.description,
-      imageUrl: this.state.imageUrl || null
->>>>>>> b8b8a9c48735157ca4c44279afeedbc7ba5baff6
     };
 
     await this.props.editCampus(updatedCampus);
